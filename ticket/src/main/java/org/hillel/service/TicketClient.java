@@ -17,6 +17,6 @@ public class TicketClient {
         if(stationTo == null) throw new IllegalAccessException("station to must be a set");
         if(dataFrom == null) throw new IllegalAccessException("departure must be a set");
         if(dataTo == null) throw new IllegalAccessException("arrival from must be a set");
-        return journeyService.find(stationFrom, stationTo, dataFrom, dataTo);
+        return journeyService.find(stationFrom, stationTo, dataFrom);
     }
 }
