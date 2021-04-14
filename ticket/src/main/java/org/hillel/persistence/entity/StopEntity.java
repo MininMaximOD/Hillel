@@ -3,12 +3,16 @@ package org.hillel.persistence.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.graalvm.util.CollectionsUtil;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -16,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicUpdate
 public class StopEntity extends AbstractModifyEntity<Long> implements Serializable{
 
     @Embedded
@@ -40,5 +45,19 @@ public class StopEntity extends AbstractModifyEntity<Long> implements Serializab
         if (journeyEntity == null)return;
         if (journeys == null) journeys = new ArrayList<>();
         journeys.add(journeyEntity);
+    }
+
+    public void removeAllJourney() {
+        if(CollectionUtils.isEmpty(journeys)) return;
+        journeys.forEach(item -> item.setStops(null));
+    }
+
+    public void removeJourney(JourneyEntity entity){
+        if(entity == null) {
+            throw new IllegalArgumentException("entity is null");
+        }
+        if (journeys.contains(entity)){
+            journeys.remove(entity);
+        }
     }
 }
