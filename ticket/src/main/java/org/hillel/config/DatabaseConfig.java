@@ -35,7 +35,7 @@ public class DatabaseConfig {
         config.setUsername(environment.getProperty("user"));
         config.setJdbcUrl(environment.getProperty("url"));
         config.addDataSourceProperty("name", environment.getProperty("name"));
-        config.setIdleTimeout(Long.parseLong(environment.getProperty("IdleTimeout"), 300000));
+       // config.setIdleTimeout(Long.parseLong(environment.getProperty("IdleTimeout"), 300000));
         config.setMinimumIdle(Integer.parseInt(environment.getProperty("IdleMin"), 30));
         config.setMaximumPoolSize(Integer.parseInt(environment.getProperty("PoolSizeMax"),150));
         config.setDataSourceClassName(PGSimpleDataSource.class.getName());
@@ -53,6 +53,7 @@ public class DatabaseConfig {
         properties.put("hibernate.dialect", PostgreSQL10Dialect.class.getName());
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
         properties.put("hibernate.show_sql", "true");
+        properties.put("javax.persistence.query.setIdleTimeout", 300000);
         emf.setJpaProperties(properties);
         return emf;
     }

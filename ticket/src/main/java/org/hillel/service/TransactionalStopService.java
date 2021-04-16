@@ -1,11 +1,13 @@
 package org.hillel.service;
 
 import org.hillel.persistence.entity.StopEntity;
+import org.hillel.persistence.entity.VehicleEntity;
 import org.hillel.persistence.repository.StopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service(value = "transactionalStopService")
@@ -22,7 +24,7 @@ public class TransactionalStopService {
         return stopRepository.createOrUpdate(entity);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<StopEntity> getById(Long id){
         return stopRepository.findById(id);
     }
@@ -35,5 +37,30 @@ public class TransactionalStopService {
     @Transactional
     public void removeById(Long stopId) {
         stopRepository.removeById(stopId);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<StopEntity> findAll(){
+        return stopRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<StopEntity> findAllAsNative(){
+        return stopRepository.findAllAsNative();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<StopEntity> findAllAsNamed(){
+        return stopRepository.findAllAsNamed();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<StopEntity> findAllAsCriteria(){
+        return stopRepository.findAllAsCriteria();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<StopEntity> findAllAsStoredProcedure(){
+        return stopRepository.findAllAsStoredProcedure();
     }
 }

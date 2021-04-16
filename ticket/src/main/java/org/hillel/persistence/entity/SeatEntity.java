@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @DynamicUpdate
+@NamedQueries(value = {
+        @NamedQuery(name = "findAllAsNamed", query = "from SeatEntity")
+})
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "findAllAsStoredProcedure",
+                procedureName = "find_all_seats",
+                parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
+                resultClasses = SeatEntity.class
+        )
+)
 public class SeatEntity extends AbstractModifyEntity<Long>{
 
     @Id

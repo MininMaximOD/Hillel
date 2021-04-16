@@ -7,6 +7,8 @@ import org.graalvm.util.CollectionsUtil;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.CollectionUtils;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +23,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @DynamicUpdate
+@NamedQueries(value = {
+        @NamedQuery(name = "findAllAsNamed", query = "from StopEntity")
+})
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "findAllAsStoredProcedure",
+                procedureName = "find_all_stops",
+                parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
+                resultClasses = StopEntity.class
+        )
+)
 public class StopEntity extends AbstractModifyEntity<Long> implements Serializable{
 
     @Embedded
