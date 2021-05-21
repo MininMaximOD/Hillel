@@ -23,7 +23,7 @@ import org.hibernate.annotations.NamedQuery;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-@NamedQueries(value = {
+/*@NamedQueries(value = {
         @NamedQuery(name = "findAllAsNamed", query = "from JourneyEntity")
 })
 @NamedStoredProcedureQueries(
@@ -33,7 +33,7 @@ import org.hibernate.annotations.NamedQuery;
                 parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
                 resultClasses = JourneyEntity.class
         )
-)
+)*/
 public class JourneyEntity extends AbstractModifyEntity<Long>{
 
     @Column(name = "station_from", length = 60, nullable = false)
@@ -41,6 +41,9 @@ public class JourneyEntity extends AbstractModifyEntity<Long>{
 
     @Column(name = "station_to", length = 60, nullable = false)
     private String stationTo;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "date_from", nullable = false)
     private Instant dateFrom;
@@ -107,5 +110,18 @@ public class JourneyEntity extends AbstractModifyEntity<Long>{
     @Override
     public int hashCode() {
         return Objects.hash(stationFrom);
+    }
+
+    @Override
+    public String toString() {
+        return "JourneyEntity{" +
+                "id=" + getId() + " , " +
+                "name='" + name + '\'' +
+                "stationFrom='" + stationFrom + '\'' +
+                ", stationTo='" + stationTo + '\'' +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", vehicle=" + vehicle +
+                '}';
     }
 }

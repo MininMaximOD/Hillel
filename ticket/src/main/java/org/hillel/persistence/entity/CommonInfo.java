@@ -10,8 +10,8 @@ import javax.persistence.Embeddable;
 @Getter
 @Setter
 public class CommonInfo {
-    @Column(name = "name", nullable = false)
-    private String name;
+    /*@Column(name = "name", nullable = false)
+    private String name;*/
 
     @Column(name = "description", length = 10000)
     private String description;

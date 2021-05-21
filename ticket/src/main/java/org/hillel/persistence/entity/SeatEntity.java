@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @DynamicUpdate
-@NamedQueries(value = {
+/*@NamedQueries(value = {
         @NamedQuery(name = "findAllAsNamed", query = "from SeatEntity")
 })
 @NamedStoredProcedureQueries(
@@ -26,7 +26,7 @@ import java.util.List;
                 parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
                 resultClasses = SeatEntity.class
         )
-)
+)*/
 public class SeatEntity extends AbstractModifyEntity<Long>{
 
     @Id

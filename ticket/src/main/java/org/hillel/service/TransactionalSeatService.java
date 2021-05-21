@@ -50,19 +50,19 @@ public class TransactionalSeatService {
         return seatRepository.findAllAsNative();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<SeatEntity> findAllAsNamed(){
         return seatRepository.findAllAsNamed();
     }
-
+*/
     @Transactional(readOnly = true)
     public Collection<SeatEntity> findAllAsCriteria(){
         return seatRepository.findAllAsCriteria();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<SeatEntity> findAllAsStoredProcedure(){
         return seatRepository.findAllAsStoredProcedure();
     }
-
+*/
 }

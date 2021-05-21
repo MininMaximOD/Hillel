@@ -3,7 +3,6 @@ package org.hillel.persistence.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.graalvm.util.CollectionsUtil;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.CollectionUtils;
@@ -23,7 +22,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @DynamicUpdate
-@NamedQueries(value = {
+/*@NamedQueries(value = {
         @NamedQuery(name = "findAllAsNamed", query = "from StopEntity")
 })
 @NamedStoredProcedureQueries(
@@ -33,11 +32,14 @@ import java.util.List;
                 parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
                 resultClasses = StopEntity.class
         )
-)
+)*/
 public class StopEntity extends AbstractModifyEntity<Long> implements Serializable{
 
     @Embedded
     private CommonInfo commonInfo;
+
+    @Column(name = "name")
+    private String name;
 
     @OneToOne(mappedBy = "stop", cascade = CascadeType.PERSIST)
     private StopAdditionalInfoEntity additionalInfo;
@@ -72,5 +74,14 @@ public class StopEntity extends AbstractModifyEntity<Long> implements Serializab
         if (journeys.contains(entity)){
             journeys.remove(entity);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "StopEntity{" +
+                "commonInfo=" + commonInfo +
+                ", name='" + name + '\'' +
+                ", additionalInfo=" + additionalInfo +
+                '}';
     }
 }
