@@ -1,12 +1,13 @@
 package org.hillel.service;
 
 import org.hillel.persistence.entity.JourneyEntity;
-import org.hillel.persistence.repository.JourneyRepository;
+import org.hillel.persistence.jpa.repository.JourneyJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -14,17 +15,16 @@ import java.util.Optional;
 public class TransactionalJourneyService{
 
     @Autowired
-    private JourneyRepository journeyRepository;
+    private JourneyJpaRepository journeyRepository;
 
     @Transactional
     public JourneyEntity createOrUpdate(final JourneyEntity entity){
        if (entity == null){
             throw new IllegalArgumentException("Entity is null");
         }
-        final JourneyEntity orUpdate = journeyRepository.createOrUpdate(entity);
+        final JourneyEntity orUpdate = journeyRepository.save(entity);
         JourneyEntity journey = journeyRepository.findById(orUpdate.getId()).get();
-      //  journeyRepository.removeById(journey.getId());
-        return journeyRepository.createOrUpdate(entity);
+        return journeyRepository.save(entity);
     }
 
     @Transactional(readOnly = true)
@@ -40,12 +40,12 @@ public class TransactionalJourneyService{
 
     @Transactional
     public void remove(JourneyEntity journey) {
-        journeyRepository.remove(journey);
+        journeyRepository.delete(journey);
     }
 
     @Transactional
     public void removeById(Long journeyId) {
-        journeyRepository.removeById(journeyId);
+        journeyRepository.deleteById(journeyId);
     }
 
     @Transactional(readOnly = true)
@@ -54,32 +54,47 @@ public class TransactionalJourneyService{
     }
 
     @Transactional(readOnly = true)
+    public Collection<JourneyEntity> findAllWithPagination(final int numberPage, final int sizePage){
+        return journeyRepository.findList(PageRequest.of(numberPage, sizePage));
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<JourneyEntity> findAllWithPagination(final int numberPage, final int sizePage, String sort){
+        return journeyRepository.findList(PageRequest.of(numberPage, sizePage, Sort.by(sort)));
+    }
+
+
+
+
+   /* @Transactional(readOnly = true)
+    public Collection<AbstractModifyEntity> findOnlyActive(){return journeyRepository.findOnlyActive(CommonSpecification.onlyActive());}
+*/
+   /* @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsNative(){
         return journeyRepository.findAllAsNative();
     }
 
-   /* @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsNamed(){
         return journeyRepository.findAllAsNamed();
     }*/
 
-    @Transactional(readOnly = true)
+  /*  @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsCriteria(){
         return journeyRepository.findAllAsCriteria();
     }
 
-   /* @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsStoredProcedure(){
         return journeyRepository.findAllAsStoredProcedure();
     }
+*/   /* @Transactional(readOnly = true)
+    public Collection<JourneyEntity> findAllWithSorted(int pageNumber, int countValues, String sortedField, boolean ascending) {
+        return journeyRepository.findAllWithSorted(PageRequest.of(pageNumber, countValues, Sort.by("JourneyEntity_."+ sortedField)));
+    }
 */
     @Transactional(readOnly = true)
-    public Collection<JourneyEntity> findAllWithSorted(int startPosition, int countValues, String sortedField, boolean ascending) {
-        return journeyRepository.findAllWithSorted(startPosition, countValues, sortedField, ascending);
-    }
-
-    @Transactional(readOnly = true)
-    public BigInteger getCount() {
-        return journeyRepository.getCountEntitys();
+    public Long getCount() {
+        return journeyRepository.findCountLong();
     }
 }

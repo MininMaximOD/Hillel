@@ -30,9 +30,9 @@ import javax.persistence.*;
 )*/
 public class VehicleEntity extends AbstractModifyEntity<Long> {
 
-    @Column(name = "name", nullable = false)
+    /*@Column(name = "name", nullable = false)
     private String name;
-
+*/
     @Column(name = "order_number", nullable = false)
     private String orderNumber;
 
@@ -67,18 +67,20 @@ public class VehicleEntity extends AbstractModifyEntity<Long> {
         }
         journeys.add(journey);
         journey.addVehicle(this);
+        this.setVehicleStatus(VehicleStatus.ON_ROUTE);
     }
 
     public void removeAllJourney(){
         if(CollectionUtils.isEmpty(journeys)) return;;
         journeys.forEach(item->item.setVehicle(null));
+        this.setVehicleStatus(VehicleStatus.FREE);
     }
 
     @Override
     public String toString() {
         return "VehicleEntity{" +
                 "id=" + getId() + " , " +
-                "name='" + name + '\'' +
+                "name='" + getName() + '\'' +
                 ", orderNumber='" + orderNumber + '\'' +
                 ", vehicleType=" + vehicleType +
                 ", countSeats=" + countSeats +
