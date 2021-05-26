@@ -5,15 +5,11 @@ import org.hillel.persistence.entity.*;
 import org.hillel.service.TicketClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 public class Starter {
@@ -77,6 +73,32 @@ public class Starter {
 
         Stream<StopEntity> streamStopPagenationAndSort = (ticketClient.findAllStopsWithPagination(1, countValues)).stream();
         streamStopPagenationAndSort.forEach(stopEntity -> System.out.println(stopEntity));
+
+        System.out.println("-------------------------------------");
+        System.out.println("Dynamic filter");
+
+        JourneyEntity journey = new JourneyEntity();
+        journey.setStationTo("Kiev");
+        journey.setStationFrom("Odessa");
+        journey.setActive(true);
+        journey.setDateTo(Instant.now());
+        journey.setDateFrom(Instant.now());
+        ticketClient.createOrUpdateJourney(journey);
+        HashMap<String, String> predicates = new HashMap<>();
+        predicates.put("journey.stationFrom", "Odessa");
+        predicates.put("journey.stationTo", "Kiev");
+        Stream<JourneyEntity> streamWithMapPredicates = (ticketClient.findAllWithDynamicFilterJourney(predicates, 0,5)).stream();
+        streamWithMapPredicates.forEach(journeyEntity -> System.out.println(journeyEntity));
+
+        HashMap<String, String> predicatesVehicle = new HashMap<>();
+        predicatesVehicle.put("vehicle.countSeats", "34");
+        Stream<VehicleEntity> streamWithMapPredicatesVehicle = (ticketClient.findAllWithDynamicFilterVehicle(predicatesVehicle, 0,5)).stream();
+        streamWithMapPredicatesVehicle.forEach(vehicleEntity -> System.out.println(vehicleEntity));
+
+        HashMap<String, String> predicatesStop = new HashMap<>();
+        predicatesStop.put("stop.name", "stop_1");
+        Stream<StopEntity> streamWithMapPredicatesStop = (ticketClient.findAllWithDynamicFilterStop(predicatesStop, 0,5)).stream();
+        streamWithMapPredicatesStop.forEach(stopEntity -> System.out.println(stopEntity));
        /* Scanner scanner = new Scanner(System.in);
         System.out.println("enter entity");
         String entity = scanner.next();

@@ -1,19 +1,12 @@
 package org.hillel.persistence.jpa.repository;
 
-import org.hillel.persistence.entity.AbstractModifyEntity;
-import org.hillel.persistence.entity.JourneyEntity;
-import org.hillel.persistence.jpa.repository.specification.CommonSpecification;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 @NoRepositoryBean

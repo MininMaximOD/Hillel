@@ -2,17 +2,22 @@ package org.hillel.service;
 
 import org.hillel.persistence.entity.JourneyEntity;
 import org.hillel.persistence.jpa.repository.JourneyJpaRepository;
+import org.hillel.persistence.jpa.repository.specification.Filter;
+import org.hillel.persistence.jpa.repository.specification.JourneySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service(value = "transactionJourneyService")
 public class TransactionalJourneyService{
+
+    private Filter<JourneyEntity> filter = new Filter();
 
     @Autowired
     private JourneyJpaRepository journeyRepository;
@@ -59,6 +64,11 @@ public class TransactionalJourneyService{
     }
 
     @Transactional(readOnly = true)
+    public Collection<JourneyEntity> findAllWithPagination(final int numberPage, final int sizePage, HashMap<String, String> specifications){
+        return journeyRepository.findAll(filter.builderSpecification(specifications) , PageRequest.of(numberPage, sizePage)).getContent();
+    }
+
+    @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllWithPagination(final int numberPage, final int sizePage, String sort){
         return journeyRepository.findList(PageRequest.of(numberPage, sizePage, Sort.by(sort)));
     }
@@ -97,4 +107,5 @@ public class TransactionalJourneyService{
     public Long getCount() {
         return journeyRepository.findCountLong();
     }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,6 +115,17 @@ public class TicketClient {
 //        return vehicleService.findFreeEntity();
 //    }
 
+    public Collection<JourneyEntity> findAllWithDynamicFilterJourney(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return journeyService.findAllWithPagination(numberPage, sizePage, predicates);
+    }
+
+    public Collection<VehicleEntity> findAllWithDynamicFilterVehicle(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return vehicleService.findAllWithPagination(numberPage, sizePage, predicates);
+    }
+
+    public Collection<StopEntity> findAllWithDynamicFilterStop(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return stopService.findAllWithPagination(numberPage, sizePage, predicates);
+    }
 
 
     public Long getCountJourneys() {

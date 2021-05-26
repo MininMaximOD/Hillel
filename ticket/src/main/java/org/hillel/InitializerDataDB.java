@@ -19,11 +19,11 @@ public class InitializerDataDB {
 
     public Collection<VehicleEntity> setContentVehicleTab(){
         List<VehicleEntity> vehicles = new ArrayList<VehicleEntity>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 20; i++) {
             VehicleEntity vehicleEntity = new VehicleEntity();
             vehicleEntity.setName("Bus" + i);
             vehicleEntity.setVehicleType(VehicleType.BUS);
-            vehicleEntity.setCountSeats(generateRandomInteger(24, 48));
+            vehicleEntity.setCountSeats(generateRandomInteger(32, 48));
             vehicleEntity.setOrderNumber(generateOrderNumber(i));
             vehicleEntity.setActive(generateRandomBoolean());
             vehicles.add(vehicleEntity);

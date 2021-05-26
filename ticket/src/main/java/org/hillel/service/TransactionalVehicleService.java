@@ -1,21 +1,22 @@
 package org.hillel.service;
 
 import org.hillel.persistence.entity.JourneyEntity;
+import org.hillel.persistence.entity.StopEntity;
 import org.hillel.persistence.entity.VehicleEntity;
 import org.hillel.persistence.jpa.repository.VehicleJpaRepository;
+import org.hillel.persistence.jpa.repository.specification.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionalVehicleService {
+
+    private Filter<VehicleEntity> filter = new Filter<>();
 
     @Autowired
     private VehicleJpaRepository vehicleRepository;
@@ -100,6 +101,12 @@ public class TransactionalVehicleService {
     @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllWithPagination(final int numberPage, final int sizePage, String sort){
         return vehicleRepository.findList(PageRequest.of(numberPage, sizePage, Sort.by(sort)));
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<VehicleEntity> findAllWithPagination(final int numberPage, final int sizePage, HashMap<String, String> specifications){
+        if(specifications.isEmpty()){return findAllWithPagination(numberPage, sizePage);}
+        return vehicleRepository.findAll(filter.builderSpecification(specifications) , PageRequest.of(numberPage, sizePage)).getContent();
     }
 
     @Transactional(readOnly = true)
