@@ -5,9 +5,8 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-@WebFilter(urlPatterns = "/*", filterName = "charsetFilter")
+//@WebFilter(urlPatterns = "/*", filterName = "charsetFilter")
 public class CharsetEncodingFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
