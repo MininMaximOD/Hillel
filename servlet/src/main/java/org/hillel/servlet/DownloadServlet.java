@@ -12,7 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.rmi.server.ExportException;
 
-@WebServlet(urlPatterns = "/download/*", displayName = "downloadServlet", loadOnStartup = 1)
+//@WebServlet(urlPatterns = "/download/*", displayName = "downloadServlet", loadOnStartup = 1)
 public class DownloadServlet extends HttpServlet {
 
     @Override
