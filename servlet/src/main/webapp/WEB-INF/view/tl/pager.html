@@ -1,0 +1,22 @@
+    <fieldset>
+
+        <label>Текущая страница: </label>
+        <label th:text="${page.numberPage}"></label>
+        <br>
+        <label for="pageNumber">введите номер страницы</label>
+        <input id="pageNumber" th:name="numberPage"/>
+        <label for="pageNumber">из:</label>
+        <label for="pageNumber" th:text="${page.totalPages}"></label>
+        <br>
+        <label for="sizePage">введите размер страницы</label>
+        <select id="sizePage" th:name="sizePage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+        <br>
+        <input type="submit" value="Показать результат">
+        <br>
+        <label>Всего элементов: </label>
+        <label th:text="${page.totalElements}"></label>
+    </fieldset>

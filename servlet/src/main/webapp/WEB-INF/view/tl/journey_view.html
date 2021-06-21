@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${journey.name}">Title</title>
+    <style>
+        tr, span{
+            font-size: 250%;
+        }
+    </style>
+</head>
+<body th:whatever="${journey}">
+<table border="1" >
+    <tr>
+        <td>Название маршрута</td>
+        <td th:text="${journey.name}"></td>
+    </tr>
+    <tr>
+        <td>Откуда</td>
+        <td th:text="${journey.stationFrom}"></td>
+    </tr>
+    <tr>
+        <td>Куда</td>
+        <td th:text="${journey.stationTo}"></td>
+    </tr>
+    <tr>
+        <td>Дата и время отправления</td>
+        <td th:text="${journey.dateFrom}"></td>
+    </tr>
+    <tr>
+        <td>Дата и время прибытия</td>
+        <td th:text="${journey.dateTo}"></td>
+    </tr>
+    <tr>
+        <td>Транспортное средство</td>
+        <td th:text="${vehicleName}"></td>
+    </tr>
+
+
+</table>
+
+<span> <a th:href="@{/tl/journey/delete/{journeyId}(journeyId=${journey.id})}">Удалить</a></span>
+
+<p>Добавить транспортное средство</p>
+
+       <form method="post" th:action="@{/tl/journey/addVehicle/}" th:object="${journey}" name="journey">
+        <select >
+            <option th:each="vehicle, iterator: ${vehicles}" th:text="${vehicle.name}" th:value="${vehicle}" name="journey.vehicle"></option>
+        </select>
+        <input type="submit" th:value="Добавить" />
+        </form>
+
+<!--<form method="get" th:action="@{/tl/journey/addVehicle?journeyId=${journey.id}&vehicleId=${vehicle.id}}">
+<select >
+    <option th:each="vehicle, iterator: ${vehicles}" th:text="${vehicle.name}"></option>
+</select>
+<input type="submit" th:value="Добавить" />
+</form>-->
+
+</body>
+</html>

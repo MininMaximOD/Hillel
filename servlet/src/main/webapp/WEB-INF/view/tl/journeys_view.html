@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <link rel="import" href="pager.ftl">
+
+    <meta charset="UTF-8">
+    <title>Journeys</title>
+</head>
+<body>
+<h1>Список всех маршрутов</h1>
+<table>
+    <thead>
+    <tr>
+        <td>Порядковый номер</td>
+        <td>Название</td>
+        <td>Из</td>
+        <td>В</td>
+        <td>Дата отправления</td>
+        <td>Дата прибытия</td>
+        <td>Удалить</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="journey, iterator: ${journeys}">
+        <td th:text="${iterator.index+1}"/>
+        <td> <a th:href="@{/tl/journey/{journeyId}(journeyId=${journey.id})}" th:text="${journey.name}"></a></td>
+        <td th:text="${journey.stationFrom}"/>
+        <td th:text="${journey.stationTo}"/>
+        <td th:text="${journey.dateFrom}"/>
+        <td th:text="${journey.dateTo}"/>
+        <td><a th:href="@{/tl/journey/delete/{journeyId}(journeyId=${journey.id})}">Удалить</a></td>
+
+    </tr>
+    </tbody>
+</table>
+
+<form action="#" method="post" th:action="@{/tl/journey/save}" th:object="${jouSave}">
+    <fieldset>
+        <label for="name">Название маршрута</label>
+        <input id="name" th:name="name"/>
+        <label for="stationFrom">Станция отправления</label>
+        <input id="stationFrom" th:name="stationFrom"/>
+        <label for="stationTo">Станция прибытия</label>
+        <input id="stationTo" th:name="stationTo"/>
+        <label for="dateFrom">Время отправления</label>
+        <input id="dateFrom" type="datetime-local" th:name="dateFrom"/>
+        <label for="dateTo">Время прибытия</label>
+        <input id="dateTo" type="datetime-local" th:name="dateTo"/>
+        <input type="submit" th:value="Сохранить">
+    </fieldset>
+</form>
+
+<form action="#" method="post" th:action="@{/tl/journeys}" th:object="${page}">
+    <fieldset>
+
+        <label>Текущая страница: </label>
+        <label th:text="${page.numberPage}"></label>
+        <br>
+        <label for="pageNumber">введите номер страницы</label>
+        <input id="pageNumber" th:name="numberPage"/>
+        <label for="pageNumber">из:</label>
+        <label for="pageNumber" th:text="${page.totalPages}"></label>
+        <br>
+        <label for="sizePage">введите размер страницы</label>
+        <select id="sizePage" th:name="sizePage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+        <br>
+        <input type="submit" value="Показать результат">
+        <br>
+        <label>Всего элементов: </label>
+        <label th:text="${page.totalElements}"></label>
+    </fieldset>
+</form>
+</body>
+</html>

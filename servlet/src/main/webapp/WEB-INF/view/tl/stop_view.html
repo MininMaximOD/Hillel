@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${stop.name}"></title>
+    <style>
+        tr, span{
+            font-size: 250%;
+        }
+    </style>
+</head>
+<body th:whatever="${stop}">
+
+<table border="1" >
+    <tr>
+        <td>Название</td>
+        <td th:text="${stop.name}"></td>
+    </tr>
+    <tr>
+        <td colspan="2">Координаты</td>
+    </tr>
+    <tr>
+        <td th:text="${stop.longitude}"></td>
+        <td th:text="${stop.latitude}"></td>
+    </tr>
+    <tr>
+        <td>Город </td>
+        <td th:text="${stop.city}"></td>
+    </tr>
+    <tr>
+        <td>Описание: </td>
+        <td th:text="${stop.description}"></td>
+    </tr>
+</table>
+
+ <span> <a th:href="@{/tl/stop/delete/{stopId}(stopId=${stop.id})}">Удалить</a></span>
+<!--
+<table>
+    <thead>
+    <tr>
+        <td>Название</td>
+        <td>Город</td>
+        <td>Координаты</td>
+        <td>Город</td>
+        <td>Удалить</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:whatever="${stop}">
+        <td th:text="${stop.name}"/>
+        <td th:text="${stop.city}"/>
+        <td th:text="${stop.longitude} '-' ${stop.latitude}" />
+        <textarea th:text="${stop.description}"/>
+        <td><a th:href="@{/tl/stop/delete/{stopId}(stopId=${stop.id})}">Удалить</a></td>
+    </tr>
+    </tbody>
+</table>
+-->
+</body>
+</html>

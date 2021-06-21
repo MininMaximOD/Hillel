@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${vehicle.name}"></title>
+  <style>
+    tr, span{
+      font-size: 250%;
+    }
+  </style>
+</head>
+<body th:whatever="${vehicle}">
+<table border="1" >
+  <tr>
+    <td>Имя автобуса</td>
+    <td th:text="${vehicle.name}"></td>
+  </tr>
+  <tr>
+    <td>Номер</td>
+    <td th:text="${vehicle.orderNumber}"></td>
+  </tr>
+  <tr>
+    <td>Количество мест</td>
+    <td th:text="${vehicle.countSeats}"></td>
+  </tr>
+  <tr>
+    <td>Статус</td>
+    <td th:text="${vehicle.vehicleStatus}"></td>
+  </tr>
+
+</table>
+
+<span> <a th:href="@{/tl/vehicle/delete/{vehicleId}(vehicleId=${vehicle.id})}">Удалить</a></span>
+
+
+
+</body>
+</html>

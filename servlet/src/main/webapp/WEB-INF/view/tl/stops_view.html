@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stops</title>
+    <style>
+        ul.pagination {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+<h1>Список всех остановок</h1>
+<!--<div th:replace="::pager (${url},${page})">...</div>-->
+<table>
+    <thead>
+    <tr>
+        <td>Порядковый номер</td>
+        <td>Название</td>
+        <td>Удалить</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="stop, iterator: ${stops}">
+        <td th:text="${iterator.index+1}"/>
+        <td> <a th:href="@{/tl/stop/{stopId}(stopId=${stop.id})}" th:text="${stop.name}"></a></td>
+<!--        <td th:text="${stop.description}"/>-->
+        <td><a th:href="@{/tl/stop/delete/{stopId}(stopId=${stop.id})}">Удалить</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<form action="#" method="post" th:action="@{/tl/stop/save}" th:object="${stopSave}">
+    <fieldset>
+        <label for="name">Название остановки</label>
+        <input id="name" th:name="name"/>
+        <label for="city">Город</label>
+        <input id="city" th:name="city"/>
+        <label for="description">Описание</label>
+        <input id="description" th:name="description"/>
+        <label for="longitude">Координаты</label>
+        <input id="longitude" type="number" step="0.01" th:name="longitude"/>
+        <input id="latitude" type="number" step="0.01" th:name="latitude"/>
+        <input type="submit" th:value="Сохранить">
+    </fieldset>
+</form>
+
+<form action="#" method="post" th:action="@{/tl/stops}" th:object="${page}">
+    <fieldset>
+
+        <label>Текущая страница: </label>
+        <label th:text="${page.numberPage}"></label>
+        <br>
+        <label for="pageNumber">введите номер страницы</label>
+        <input id="pageNumber" th:name="numberPage"/>
+        <label for="pageNumber">из:</label>
+        <label for="pageNumber" th:text="${page.totalPages}"></label>
+        <br>
+        <label for="sizePage">введите размер страницы</label>
+        <select id="sizePage" th:name="sizePage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+        <br>
+        <input type="submit" value="Показать результат">
+        <br>
+        <label>Всего элементов: </label>
+        <label th:text="${page.totalElements}"></label>
+    </fieldset>
+</form>
+</body>
+</html>

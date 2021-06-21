@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicles</title>
+    <link rel="import" href="pager.html">
+</head>
+<body>
+
+<h1>Список всех транспортных средств</h1>
+<table>
+    <thead>
+    <tr>
+        <td>Порядковый номер</td>
+        <td>Название</td>
+        <td>Номер транспортного средства</td>
+        <td>Количество мест</td>
+        <td>Удалить</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="vehicle, iterator: ${vehicles}">
+        <td th:text="${iterator.index+1}"/>
+        <td> <a th:href="@{/tl/vehicle/{vehicleId}(vehicleId=${vehicle.id})}" th:text="${vehicle.name}"></a> </th>
+        <td th:text="${vehicle.orderNumber}"/>
+        <td th:text="${vehicle.countSeats}"/>
+        <td><a th:href="@{/tl/vehicle/delete/{vehicleId}(vehicleId=${vehicle.id})}">Удалить</a> </td>
+    </tr>
+    </tbody>
+</table>
+
+<form action="#" method="post" th:action="@{/tl/vehicle/save}" th:object="${vehSave}">
+    <fieldset>
+        <label for="name">Название транспортного средства</label>
+        <input id="name" th:name="name"/>
+        <label for="orderNumber">Номер транспортного средства</label>
+        <input id="orderNumber" th:name="orderNumber"/>
+        <label for="countSeats">Количество мест</label>
+        <input id="countSeats" th:name="countSeats"/>
+        <input type="submit" th:value="Сохранить">
+    </fieldset>
+</form>
+<link rel="import" href="pager.html">
+
+<form action="#" method="post" th:action="@{/tl/vehicles}" th:object="${page}">
+    <fieldset>
+
+    <label>Текущая страница: </label>
+    <label th:text="${page.numberPage}"></label>
+        <br>
+    <label for="pageNumber">введите номер страницы</label>
+    <input id="pageNumber" th:name="numberPage"/>
+    <label for="pageNumber">из:</label>
+    <label for="pageNumber" th:text="${page.totalPages}"></label>
+        <br>
+    <label for="sizePage">введите размер страницы</label>
+        <select id="sizePage" th:name="sizePage">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+        </select>
+        <br>
+    <input type="submit" value="Показать результат">
+        <br>
+        <label>Всего элементов: </label>
+        <label th:text="${page.totalElements}"></label>
+    </fieldset>
+</form>
+
+</body>
+</html>
