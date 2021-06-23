@@ -3,6 +3,7 @@ package org.hillel.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.ViewResolver;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring5.ISpringTemplateEngine;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 
 @Configuration
 @ComponentScan({"org.hillel.controller.tl"})
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebTLConfig {
 
     @Bean

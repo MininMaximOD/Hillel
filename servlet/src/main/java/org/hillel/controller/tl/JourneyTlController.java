@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +47,7 @@ public class JourneyTlController {
     }*/
 
     @PostMapping("/journeys")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String homeStopsPageWithPageable(@RequestParam(required = false, defaultValue = "") String filter,
                                             Model model,
                                             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, page = 0, size = 10) PaginationDto pageable){
@@ -65,6 +68,7 @@ public class JourneyTlController {
     }
 
     @GetMapping("/journeys")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String homeStopsPage(Model model,
                                 @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, page = 0, size = 10) PaginationDto pageable){
         Page<JourneyEntity> page = ticketClient.findAllJourneysWithPagination(PageRequest.of(pageable.getNumberPage(), pageable.getSizePage()));
@@ -88,6 +92,7 @@ public class JourneyTlController {
 
 
     @GetMapping("/journey/delete/{journeyId}")
+    @Secured({"ROLE_DELETE", "ROLE_ADMIN"})
     public RedirectView deleteJourney(@PathVariable("journeyId")Long journeyId){
         ticketClient.removeJourneyById(journeyId);
         return new RedirectView("/tl/journeys");
@@ -100,6 +105,7 @@ public class JourneyTlController {
     }*/
 
     @PostMapping("/journey/addVehicle")
+    @Secured({"ROLE_SAVE", "ROLE_ADMIN"})
     public RedirectView addVehicle(@ModelAttribute("journey")JourneyDto journey,
                                    @ModelAttribute("vehicle")VehicleDto vehicle){
         ticketClient.addVehicleToJourney(journeyMapper.journeyDtoToJourney(journey),
@@ -115,6 +121,7 @@ public class JourneyTlController {
     }*/
 
     @GetMapping("/journey/addVehicle")
+    @Secured({"ROLE_SAVE", "ROLE_ADMIN"})
     public RedirectView addVehicleGet(@RequestParam("journeyId")Long journeyId,
                                       @RequestParam("vehicleId")Long vehicleId) {
         ticketClient.addVehicleToJourneyById(journeyId, vehicleId);
@@ -122,12 +129,14 @@ public class JourneyTlController {
     }
 
     @PostMapping("journey/save")
+    @Secured({"ROLE_SAVE", "ROLE_ADMIN"})
     public RedirectView save(@ModelAttribute("jouSave")JourneyDto dto){
         ticketClient.createOrUpdateJourney(journeyMapper.journeyDtoToJourney(dto));
         return new RedirectView("/tl/journeys");
     }
 
     @GetMapping("/journey/{journeyId}")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String viewFullInfoForJourney(@PathVariable("journeyId")Long journeyId, Model model ){
         JourneyEntity journey = ticketClient.findJourneyById(journeyId);
         model.addAttribute("journey", journeyMapper.journeyToJourneyDto(journey));

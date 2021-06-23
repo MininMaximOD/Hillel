@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,7 @@ public class VehicleTLController {
     }*/
 
     @PostMapping("/vehicles")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String homeStopsPageWithPageable(@RequestParam(required = false, defaultValue = "") String filter,
                                             Model model,
                                             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, page = 0, size = 10) PaginationDto pageable){
@@ -58,6 +61,7 @@ public class VehicleTLController {
     }
 
     @GetMapping("/vehicles")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String homeStopsPage(Model model,
                                 @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, page = 0, size = 10) PaginationDto pageable){
         Page<VehicleEntity> page = ticketClient.findAllVehiclesWithPagination(PageRequest.of(pageable.getNumberPage(), pageable.getSizePage()));
@@ -80,18 +84,21 @@ public class VehicleTLController {
     }
 
     @GetMapping("/vehicle/delete/{vehicleId}")
+    @Secured({"ROLE_DELETE", "ROLE_ADMIN"})
     public RedirectView deleteVehicle(@PathVariable("vehicleId")Long vehicleId){
         ticketClient.removeVehicleById(vehicleId);
         return new RedirectView("/tl/vehicles");
     }
 
     @PostMapping("/vehicle/save")
+    @Secured({"ROLE_SAVE", "ROLE_ADMIN"})
     public RedirectView save(@ModelAttribute("vehSave")VehicleDto vehicleDto){
         ticketClient.createOrUpdateVehicle(vehicleMapper.vehicleDtoToVehicle(vehicleDto));
         return new RedirectView("/tl/vehicles");
     }
 
     @GetMapping("/vehicle/{vehicleId}")
+    @Secured({"ROLE_VIEW", "ROLE_ADMIN"})
     public String viewFullInfoForVehicle(@PathVariable("vehicleId")Long vehicleId, Model model ){
         VehicleEntity vehicle = ticketClient.findVehicleById(vehicleId);
         model.addAttribute("vehicle", vehicleMapper.vehicleToVehicleDto(vehicle));

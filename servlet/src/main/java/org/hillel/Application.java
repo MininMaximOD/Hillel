@@ -1,6 +1,7 @@
 package org.hillel;
 
 import org.hillel.config.RootConfig;
+import org.hillel.config.SecurityConfig;
 import org.hillel.config.WebJspConfig;
 import org.hillel.config.WebTLConfig;
 import org.hillel.servlet.DownloadServlet;
@@ -10,6 +11,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
@@ -22,7 +24,7 @@ public class Application implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext rootConfig = new AnnotationConfigWebApplicationContext();
-        rootConfig.register(RootConfig.class);
+        rootConfig.register(RootConfig.class, SecurityConfig.class);
         servletContext.addListener(new ContextLoaderListener(rootConfig));
 
         AnnotationConfigWebApplicationContext jspAppContext = new AnnotationConfigWebApplicationContext();
@@ -39,7 +41,12 @@ public class Application implements WebApplicationInitializer {
 
         FilterRegistration.Dynamic charsetFilter = servletContext.addFilter("charsetFilter", new CharacterEncodingFilter(StandardCharsets.UTF_8.displayName()));
         charsetFilter.addMappingForUrlPatterns(null, true, "/*");
+
+        servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain")).
+        addMappingForUrlPatterns(null, true, "/*");
+
     }
+
 
         /*extends AbstractAnnotationConfigDispatcherServletInitializer{
     @Override
