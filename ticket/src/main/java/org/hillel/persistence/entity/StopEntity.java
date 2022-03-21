@@ -38,8 +38,8 @@ public class StopEntity extends AbstractModifyEntity<Long> implements Serializab
     @Embedded
     private CommonInfo commonInfo;
 
-    @Column(name = "name")
-    private String name;
+    /*@Column(name = "name")
+    private String name;*/
 
     @OneToOne(mappedBy = "stop", cascade = CascadeType.PERSIST)
     private StopAdditionalInfoEntity additionalInfo;
@@ -80,7 +80,7 @@ public class StopEntity extends AbstractModifyEntity<Long> implements Serializab
     public String toString() {
         return "StopEntity{" +
                 "commonInfo=" + commonInfo +
-                ", name='" + name + '\'' +
+                ", name='" + getName() + '\'' +
                 ", additionalInfo=" + additionalInfo +
                 '}';
     }

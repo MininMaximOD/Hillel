@@ -1,28 +1,32 @@
 package org.hillel.service;
 
+import org.hillel.persistence.entity.JourneyEntity;
 import org.hillel.persistence.entity.StopEntity;
 import org.hillel.persistence.entity.VehicleEntity;
-import org.hillel.persistence.repository.VehicleRepository;
+import org.hillel.persistence.jpa.repository.VehicleJpaRepository;
+import org.hillel.persistence.jpa.repository.specification.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionalVehicleService {
 
+    private Filter<VehicleEntity> filter = new Filter<>();
+
     @Autowired
-    private VehicleRepository vehicleRepository;
+    private VehicleJpaRepository vehicleRepository;
 
     @Transactional
     public VehicleEntity createOrUpdate (final VehicleEntity vehicleEntity){
         if(vehicleEntity == null){
             throw new IllegalArgumentException("Entity is null");
         }
-        return vehicleRepository.createOrUpdate(vehicleEntity);
+        return vehicleRepository.save(vehicleEntity);
     }
 
     @Transactional(readOnly = true)
@@ -32,17 +36,17 @@ public class TransactionalVehicleService {
 
     @Transactional
     public void remove(VehicleEntity vehicle){
-        vehicleRepository.remove(vehicle);
+        vehicleRepository.delete(vehicle);
     }
 
     @Transactional
     public void removeById(Long vehicleId) {
-        vehicleRepository.removeById(vehicleId);
+        vehicleRepository.deleteById(vehicleId);
     }
 
     @Transactional
-    public Collection<VehicleEntity> findByIds(Long ... ids){
-        return vehicleRepository.findByIds(ids);
+    public List<VehicleEntity> findByIds(Long ... ids){
+        return vehicleRepository.findAllById(Arrays.asList(ids));
     }
 
     @Transactional(readOnly = true)
@@ -56,30 +60,30 @@ public class TransactionalVehicleService {
 
     @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAll(){
-        return vehicleRepository.findAll();
+        return (Collection<VehicleEntity>) vehicleRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsNative(){
         return vehicleRepository.findAllAsNative();
     }
-
+*/
    /* @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsNamed(){
         return vehicleRepository.findAllAsNamed();
     }*/
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsCriteria(){
         return vehicleRepository.findAllAsCriteria();
     }
-
+*/
    /* @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsStoredProcedure(){
         return vehicleRepository.findAllAsStoredProcedure();
     }*/
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllWithSorted(int startPosition, int countValues, String sortedField, boolean ascending){
         return vehicleRepository.findAllWithSorted(startPosition, countValues, sortedField, ascending);
     }
@@ -87,15 +91,31 @@ public class TransactionalVehicleService {
     @Transactional(readOnly = true)
     public VehicleEntity findFreeEntity() {
         return vehicleRepository.findFreeEntity();
+    }*/
+
+    @Transactional(readOnly = true)
+    public Collection<VehicleEntity> findAllWithPagination(final int numberPage, final int sizePage){
+        return vehicleRepository.findList(PageRequest.of(numberPage, sizePage));
     }
 
     @Transactional(readOnly = true)
-    public BigInteger getCount() {
-        return vehicleRepository.getCountEntitys();
+    public Collection<VehicleEntity> findAllWithPagination(final int numberPage, final int sizePage, String sort){
+        return vehicleRepository.findList(PageRequest.of(numberPage, sizePage, Sort.by(sort)));
     }
 
     @Transactional(readOnly = true)
+    public Collection<VehicleEntity> findAllWithPagination(final int numberPage, final int sizePage, HashMap<String, String> specifications){
+        if(specifications.isEmpty()){return findAllWithPagination(numberPage, sizePage);}
+        return vehicleRepository.findAll(filter.builderSpecification(specifications) , PageRequest.of(numberPage, sizePage)).getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Long getCount() {
+        return vehicleRepository.findCountLong();
+    }
+
+    /*@Transactional(readOnly = true)
     public Collection<VehicleEntity> findVehiclesWithMaxOrMinSeats(String a){
         return vehicleRepository.findVehiclesWithMaxOrMinSeats(a);
-    }
+    }*/
 }

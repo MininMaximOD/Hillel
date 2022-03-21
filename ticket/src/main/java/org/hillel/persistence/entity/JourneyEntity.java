@@ -42,9 +42,9 @@ public class JourneyEntity extends AbstractModifyEntity<Long>{
     @Column(name = "station_to", length = 60, nullable = false)
     private String stationTo;
 
-    @Column(name = "name")
+   /* @Column(name = "name")
     private String name;
-
+*/
     @Column(name = "date_from", nullable = false)
     private Instant dateFrom;
 
@@ -116,7 +116,7 @@ public class JourneyEntity extends AbstractModifyEntity<Long>{
     public String toString() {
         return "JourneyEntity{" +
                 "id=" + getId() + " , " +
-                "name='" + name + '\'' +
+                "name='" + getName() + '\'' +
                 "stationFrom='" + stationFrom + '\'' +
                 ", stationTo='" + stationTo + '\'' +
                 ", dateFrom=" + dateFrom +

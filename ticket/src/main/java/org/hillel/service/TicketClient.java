@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +28,8 @@ public class TicketClient {
     @Autowired
     private TransactionalVehicleService vehicleService;
 
-//    @Autowired
-//    Environment environment;
-
     public TicketClient(){
     }
-
 
     public Optional<JourneyEntity> findById(Long id, Boolean withDependencies){
         return id ==null ? Optional.empty() : journeyService.getById(id, withDependencies);
@@ -71,18 +68,41 @@ public class TicketClient {
         vehicleService.remove(vehicle);
     }
 
-    public Collection<VehicleEntity> findAllVehicles(int startPosition, int countValues, String sortedField, boolean ascending){
-        return vehicleService.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    public Collection<VehicleEntity> findAllVehicles(){
+        return vehicleService.findAll();
     }
 
-    public Collection<JourneyEntity> findAllJourneys(int startPosition, int countValues, String sortedField, boolean ascending){
-        return journeyService.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    public Collection<JourneyEntity> findAllJourneys(){
+        return journeyService.findAll();
     }
 
-    public Collection<StopEntity> findAllStops(int startPosition, int countValues, String sortedField, boolean ascending){
-        return stopService.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    public Collection<StopEntity> findAllStops(){
+        return stopService.findAll();
     }
 
+    public Collection<JourneyEntity> findAllJourneysWithPagination(final int numberPage,final int sizePage){
+        return journeyService.findAllWithPagination(numberPage, sizePage);
+    }
+
+    public Collection<JourneyEntity> findAllJourneysWithPaginationAndSort(final int numberPage,final int sizePage, String sort){
+        return journeyService.findAllWithPagination(numberPage, sizePage, sort);
+    }
+
+    public Collection<VehicleEntity> findAllVehiclesWithPagination(final int numberPage,final int sizePage){
+        return vehicleService.findAllWithPagination(numberPage, sizePage);
+    }
+
+    public Collection<VehicleEntity> findAllVehiclesWithPaginationAndSort(final int numberPage,final int sizePage, String sort){
+        return vehicleService.findAllWithPagination(numberPage, sizePage, sort);
+    }
+
+    public Collection<StopEntity> findAllStopsWithPagination(final int numberPage,final int sizePage){
+        return stopService.findAllWithPagination(numberPage, sizePage);
+    }
+
+    public Collection<StopEntity> findAllWithStopsPaginationAndSort(final int numberPage,final int sizePage, String sort){
+        return stopService.findAllWithPagination(numberPage, sizePage, sort);
+    }
     public Collection<VehicleEntity> findVehiclesWithMinFreeSeats(){
         return null;
     }
@@ -91,26 +111,36 @@ public class TicketClient {
         return null;
     }
 
-    public VehicleEntity findFreeVehicle(){
-        return vehicleService.findFreeEntity();
+//    public VehicleEntity findFreeVehicle(){
+//        return vehicleService.findFreeEntity();
+//    }
+
+    public Collection<JourneyEntity> findAllWithDynamicFilterJourney(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return journeyService.findAllWithPagination(numberPage, sizePage, predicates);
+    }
+
+    public Collection<VehicleEntity> findAllWithDynamicFilterVehicle(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return vehicleService.findAllWithPagination(numberPage, sizePage, predicates);
+    }
+
+    public Collection<StopEntity> findAllWithDynamicFilterStop(HashMap<String, String> predicates, int numberPage, int sizePage){
+        return stopService.findAllWithPagination(numberPage, sizePage, predicates);
     }
 
 
-
-    public BigInteger getCountJourneys() {
+    public Long getCountJourneys() {
         return journeyService.getCount();
     }
-
-    public BigInteger getCountVehicles() {
+    public long getCountVehicles() {
         return vehicleService.getCount();
     }
 
-    public BigInteger getCountStops() {
+    public Long getCountStops() {
         return stopService.getCount();
     }
 
-    public Collection<VehicleEntity> findVehiclesWithMaxOrMinFreeSeats(String maxOrMin){
+    /*public Collection<VehicleEntity> findVehiclesWithMaxOrMinFreeSeats(String maxOrMin){
         return vehicleService.findVehiclesWithMaxOrMinSeats(maxOrMin);
-    }
+    }*/
 }
 

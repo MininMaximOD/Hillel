@@ -1,22 +1,15 @@
 package org.hillel;
 
 import org.hillel.config.RootConfig;
-import org.hillel.persistence.entity.AbstractModifyEntity;
-import org.hillel.persistence.entity.JourneyEntity;
-import org.hillel.persistence.entity.StopEntity;
-import org.hillel.persistence.entity.VehicleEntity;
+import org.hillel.persistence.entity.*;
 import org.hillel.service.TicketClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 public class Starter {
@@ -57,11 +50,56 @@ public class Starter {
         //Д.з. 6 основное задание
         System.out.println("_______________________________");
         int countValues = 5;
-        int countPagesJourneys = (ticketClient.getCountJourneys()).intValue() / countValues;
-        int countPagesVehicles = (ticketClient.getCountVehicles()).intValue() / countValues;
-        int countPagesStops = (ticketClient.getCountStops()).intValue() / countValues;
+        Long countPagesJourneys = (ticketClient.getCountJourneys()) / countValues;
+        Long countPagesVehicles = (ticketClient.getCountVehicles()) / countValues;
+        Long countPagesStops = (ticketClient.getCountStops()) / countValues;
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.println(countPagesJourneys+" -=- "+countPagesVehicles+" -=- "+countPagesStops );
+
+        Stream<JourneyEntity> streamJourneyPagenationAndSort = (ticketClient.findAllJourneysWithPaginationAndSort(1, countValues, JourneyEntity_.NAME)).stream();
+        streamJourneyPagenationAndSort.forEach(journeyEntity -> System.out.println(journeyEntity));
+
+        Stream<JourneyEntity> streamJourneyPagenation = (ticketClient.findAllJourneysWithPagination(1, countValues)).stream();
+        streamJourneyPagenation.forEach(journeyEntity -> System.out.println(journeyEntity));
+
+        Stream<VehicleEntity> streamVehiclePagenationAndSort = (ticketClient.findAllVehiclesWithPaginationAndSort(1, countValues, VehicleEntity_.NAME)).stream();
+        streamVehiclePagenationAndSort.forEach(vehiclesEntity -> System.out.println(vehiclesEntity));
+
+        Stream<VehicleEntity> streamVehiclePagenation = (ticketClient.findAllVehiclesWithPagination(1, countValues)).stream();
+        streamVehiclePagenation.forEach(vehiclesEntity -> System.out.println(vehiclesEntity));
+
+        Stream<StopEntity> streamStopPagenation = (ticketClient.findAllWithStopsPaginationAndSort(0, countValues, StopEntity_.NAME)).stream();
+        streamStopPagenation.forEach(stopEntity -> System.out.println(stopEntity));
+
+        Stream<StopEntity> streamStopPagenationAndSort = (ticketClient.findAllStopsWithPagination(1, countValues)).stream();
+        streamStopPagenationAndSort.forEach(stopEntity -> System.out.println(stopEntity));
+
+        System.out.println("-------------------------------------");
+        System.out.println("Dynamic filter");
+
+        JourneyEntity journey = new JourneyEntity();
+        journey.setStationTo("Kiev");
+        journey.setStationFrom("Odessa");
+        journey.setActive(true);
+        journey.setDateTo(Instant.now());
+        journey.setDateFrom(Instant.now());
+        ticketClient.createOrUpdateJourney(journey);
+        HashMap<String, String> predicates = new HashMap<>();
+        predicates.put("journey.stationFrom", "Odessa");
+        predicates.put("journey.stationTo", "Kiev");
+        Stream<JourneyEntity> streamWithMapPredicates = (ticketClient.findAllWithDynamicFilterJourney(predicates, 0,5)).stream();
+        streamWithMapPredicates.forEach(journeyEntity -> System.out.println(journeyEntity));
+
+        HashMap<String, String> predicatesVehicle = new HashMap<>();
+        predicatesVehicle.put("vehicle.countSeats", "34");
+        Stream<VehicleEntity> streamWithMapPredicatesVehicle = (ticketClient.findAllWithDynamicFilterVehicle(predicatesVehicle, 0,5)).stream();
+        streamWithMapPredicatesVehicle.forEach(vehicleEntity -> System.out.println(vehicleEntity));
+
+        HashMap<String, String> predicatesStop = new HashMap<>();
+        predicatesStop.put("stop.name", "stop_1");
+        Stream<StopEntity> streamWithMapPredicatesStop = (ticketClient.findAllWithDynamicFilterStop(predicatesStop, 0,5)).stream();
+        streamWithMapPredicatesStop.forEach(stopEntity -> System.out.println(stopEntity));
+       /* Scanner scanner = new Scanner(System.in);
         System.out.println("enter entity");
         String entity = scanner.next();
         System.out.println("enter param for sorting");
@@ -72,8 +110,8 @@ public class Starter {
             case "journey":
                 System.out.println(entity + " include " + countPagesJourneys + " pages. Enter number page.");
                 numberPage = scanner.nextInt();
-                Stream<JourneyEntity> streamJourney = (ticketClient.findAllJourneys(numberPage, countValues, sortsField, true)).stream();
-                streamJourney.forEach(journeyEntity -> System.out.println(journeyEntity));
+                Stream<JourneyEntity> streamJourneyPagenationAndSort = (ticketClient.findAllJourneys(numberPage, countValues, sortsField, true)).stream();
+                streamJourneyPagenationAndSort.forEach(journeyEntity -> System.out.println(journeyEntity));
                   break;
             case "vehicle":
                 System.out.println(entity + " include " + countPagesVehicles + " pages. Enter number page.");
@@ -92,9 +130,9 @@ public class Starter {
             default:
                 System.out.println(entity + " not found");
                 break;
-        }
+        }*/
 
-        //Д.з. 6 задаение со *
+       /* //Д.з. 6 задаение со *
         System.out.println("result with max count seats");
         Collection<VehicleEntity> vehicleEntities = ticketClient.findVehiclesWithMaxOrMinFreeSeats("max");
 //        System.out.println(vehicleEntities);
@@ -105,7 +143,7 @@ public class Starter {
         System.out.println("result with min count seats");
         Stream<VehicleEntity> stream2 = (ticketClient.findVehiclesWithMaxOrMinFreeSeats("min")).stream();
         stream2.forEach(vehicleEntity -> System.out.println(vehicleEntity));
-
+*/
         }
 
 
