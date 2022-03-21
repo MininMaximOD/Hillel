@@ -15,11 +15,11 @@ public class SeatRepository extends CommonRepository<SeatEntity, Long>{
         super(SeatEntity.class);
     }
 
-    public Collection<SeatEntity> findAllAsNamed() {
+  /*  public Collection<SeatEntity> findAllAsNamed() {
         return entityManager.createNamedQuery("findAllAsNamed", SeatEntity.class).getResultList();
-    }
+    }*/
 
-    public Collection<SeatEntity> findAllAsStoredProcedure(){
+   /* public Collection<SeatEntity> findAllAsStoredProcedure(){
         return entityManager.createNamedStoredProcedureQuery("findAllAsStoredProcedure").getResultList();
-    }
+    }*/
 }

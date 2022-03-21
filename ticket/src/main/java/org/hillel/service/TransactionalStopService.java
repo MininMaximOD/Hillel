@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -49,18 +50,27 @@ public class TransactionalStopService {
         return stopRepository.findAllAsNative();
     }
 
-    @Transactional(readOnly = true)
+  /*  @Transactional(readOnly = true)
     public Collection<StopEntity> findAllAsNamed(){
         return stopRepository.findAllAsNamed();
     }
-
+*/
     @Transactional(readOnly = true)
     public Collection<StopEntity> findAllAsCriteria(){
         return stopRepository.findAllAsCriteria();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<StopEntity> findAllAsStoredProcedure(){
         return stopRepository.findAllAsStoredProcedure();
+    }
+*/
+    @Transactional
+    public Collection<StopEntity> findAllWithSorted(int startPosition, int countValues, String sortedField, boolean ascending) {
+        return stopRepository.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    }
+
+    public BigInteger getCount() {
+        return stopRepository.getCountEntitys();
     }
 }

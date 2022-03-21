@@ -1,16 +1,13 @@
 package org.hillel.service;
 
-import org.hillel.Journey;
 import org.hillel.persistence.entity.JourneyEntity;
-import org.hillel.persistence.entity.VehicleEntity;
 import org.hillel.persistence.repository.JourneyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service(value = "transactionJourneyService")
@@ -19,10 +16,6 @@ public class TransactionalJourneyService{
     @Autowired
     private JourneyRepository journeyRepository;
 
-    public Collection<Journey> find(String stationFrom, String stationTo, LocalDateTime dateFrom) {
-        return null;
-    }
-
     @Transactional
     public JourneyEntity createOrUpdate(final JourneyEntity entity){
        if (entity == null){
@@ -30,7 +23,7 @@ public class TransactionalJourneyService{
         }
         final JourneyEntity orUpdate = journeyRepository.createOrUpdate(entity);
         JourneyEntity journey = journeyRepository.findById(orUpdate.getId()).get();
-        journeyRepository.removeById(journey.getId());
+      //  journeyRepository.removeById(journey.getId());
         return journeyRepository.createOrUpdate(entity);
     }
 
@@ -65,18 +58,28 @@ public class TransactionalJourneyService{
         return journeyRepository.findAllAsNative();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsNamed(){
         return journeyRepository.findAllAsNamed();
-    }
+    }*/
 
     @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsCriteria(){
         return journeyRepository.findAllAsCriteria();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<JourneyEntity> findAllAsStoredProcedure(){
         return journeyRepository.findAllAsStoredProcedure();
+    }
+*/
+    @Transactional(readOnly = true)
+    public Collection<JourneyEntity> findAllWithSorted(int startPosition, int countValues, String sortedField, boolean ascending) {
+        return journeyRepository.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    }
+
+    @Transactional(readOnly = true)
+    public BigInteger getCount() {
+        return journeyRepository.getCountEntitys();
     }
 }

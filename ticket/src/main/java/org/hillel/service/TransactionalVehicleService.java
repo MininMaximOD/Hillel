@@ -3,15 +3,18 @@ package org.hillel.service;
 import org.hillel.persistence.entity.StopEntity;
 import org.hillel.persistence.entity.VehicleEntity;
 import org.hillel.persistence.repository.VehicleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
 public class TransactionalVehicleService {
 
+    @Autowired
     private VehicleRepository vehicleRepository;
 
     @Transactional
@@ -61,18 +64,38 @@ public class TransactionalVehicleService {
         return vehicleRepository.findAllAsNative();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsNamed(){
         return vehicleRepository.findAllAsNamed();
-    }
+    }*/
 
     @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsCriteria(){
         return vehicleRepository.findAllAsCriteria();
     }
 
-    @Transactional(readOnly = true)
+   /* @Transactional(readOnly = true)
     public Collection<VehicleEntity> findAllAsStoredProcedure(){
         return vehicleRepository.findAllAsStoredProcedure();
+    }*/
+
+    @Transactional(readOnly = true)
+    public Collection<VehicleEntity> findAllWithSorted(int startPosition, int countValues, String sortedField, boolean ascending){
+        return vehicleRepository.findAllWithSorted(startPosition, countValues, sortedField, ascending);
+    }
+
+    @Transactional(readOnly = true)
+    public VehicleEntity findFreeEntity() {
+        return vehicleRepository.findFreeEntity();
+    }
+
+    @Transactional(readOnly = true)
+    public BigInteger getCount() {
+        return vehicleRepository.getCountEntitys();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<VehicleEntity> findVehiclesWithMaxOrMinSeats(String a){
+        return vehicleRepository.findVehiclesWithMaxOrMinSeats(a);
     }
 }

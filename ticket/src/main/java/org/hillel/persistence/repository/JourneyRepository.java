@@ -38,11 +38,11 @@ public class JourneyRepository extends CommonRepository<JourneyEntity, Long>{
         super.remove(entity);
     }
 
-    public Collection<JourneyEntity> findAllAsNamed() {
+    /*public Collection<JourneyEntity> findAllAsNamed() {
         return entityManager.createNamedQuery("findAllAsNamed", JourneyEntity.class).getResultList();
-    }
+    }*/
 
-    public Collection<JourneyEntity> findAllAsStoredProcedure(){
+  /*  public Collection<JourneyEntity> findAllAsStoredProcedure(){
         return entityManager.createNamedStoredProcedureQuery("findAllAsStoredProcedure").getResultList();
-    }
+    }*/
 }

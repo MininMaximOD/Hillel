@@ -23,11 +23,11 @@ public class StopRepository extends CommonRepository<StopEntity, Long> {
         super.remove(entity);
     }
 
-    public Collection<StopEntity> findAllAsNamed() {
+   /* public Collection<StopEntity> findAllAsNamed() {
         return entityManager.createNamedQuery("findAllAsNamed", StopEntity.class).getResultList();
-    }
+    }*/
 
-    public Collection<StopEntity> findAllAsStoredProcedure(){
+   /* public Collection<StopEntity> findAllAsStoredProcedure(){
         return entityManager.createNamedStoredProcedureQuery("findAllAsStoredProcedure").getResultList();
-    }
+    }*/
 }
