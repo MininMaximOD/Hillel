@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,5 +36,13 @@ public class JourneyRepository extends CommonRepository<JourneyEntity, Long>{
         entity.removeAllSeats();
         entity.removeAllStops();
         super.remove(entity);
+    }
+
+    public Collection<JourneyEntity> findAllAsNamed() {
+        return entityManager.createNamedQuery("findAllAsNamed", JourneyEntity.class).getResultList();
+    }
+
+    public Collection<JourneyEntity> findAllAsStoredProcedure(){
+        return entityManager.createNamedStoredProcedureQuery("findAllAsStoredProcedure").getResultList();
     }
 }

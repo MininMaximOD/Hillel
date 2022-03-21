@@ -4,18 +4,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.graalvm.util.CollectionsUtil;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 import org.hillel.persistence.entity.enums.VehicleType;
 import org.springframework.util.CollectionUtils;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "vehicle", uniqueConstraints = @UniqueConstraint(name = "uniq_order_number", columnNames = "order_number"))
 @Setter
 @Getter
 @NoArgsConstructor
+@NamedQueries(value = {
+        @NamedQuery(name = "findAllAsNamed", query = "from VehicleEntity")
+})
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "findAllAsStoredProcedure",
+                procedureName = "find_all_vehicles",
+                parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
+                resultClasses = VehicleEntity.class
+        )
+)
 public class VehicleEntity extends AbstractModifyEntity<Long> {
 
     @Column(name = "name", nullable = false)

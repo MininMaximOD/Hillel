@@ -32,12 +32,16 @@ public class ConnectionFactory implements AutoCloseable{
                     properties.getProperty("password"));
         } catch (Exception e){
             logger.log(Level.WARNING, "Exception connection: ", e);
-            return connection;
+            return null;
         }
     }
 
     @Override
     public void close() throws Exception {
+        try {
         connection.close();
+        } catch (Exception e){
+            logger.log(Level.WARNING, "Exception close connection: ", e);
+        }
     }
 }

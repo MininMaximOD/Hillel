@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 @Entity
 @Table(name = "journey")
@@ -21,6 +23,17 @@ import java.util.Objects;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
+@NamedQueries(value = {
+        @NamedQuery(name = "findAllAsNamed", query = "from JourneyEntity")
+})
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "findAllAsStoredProcedure",
+                procedureName = "find_all_seat",
+                parameters = @StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = Class.class),
+                resultClasses = JourneyEntity.class
+        )
+)
 public class JourneyEntity extends AbstractModifyEntity<Long>{
 
     @Column(name = "station_from", length = 60, nullable = false)
