@@ -3,14 +3,16 @@ package org.hillel.persistence.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.graalvm.util.CollectionsUtil;
 import org.hillel.persistence.entity.enums.VehicleType;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "vehicle")
+@Table(name = "vehicle", uniqueConstraints = @UniqueConstraint(name = "uniq_order_number", columnNames = "order_number"))
 @Setter
 @Getter
 @NoArgsConstructor
@@ -49,5 +51,10 @@ public class VehicleEntity extends AbstractModifyEntity<Long> {
         }
         journeys.add(journey);
         journey.addVehicle(this);
+    }
+
+    public void removeAllJourney(){
+        if(CollectionUtils.isEmpty(journeys)) return;;
+        journeys.forEach(item->item.setVehicle(null));
     }
 }

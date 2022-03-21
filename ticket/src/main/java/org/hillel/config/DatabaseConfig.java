@@ -33,11 +33,11 @@ public class DatabaseConfig {
         HikariConfig config= new HikariConfig();
         config.setPassword(environment.getProperty("password"));
         config.setUsername(environment.getProperty("user"));
-        config.setJdbcUrl("url");
+        config.setJdbcUrl(environment.getProperty("url"));
         config.addDataSourceProperty("name", environment.getProperty("name"));
-        config.setLeakDetectionThreshold(300000);
-        config.setMinimumIdle(30);
-        config.setMaximumPoolSize(150);
+        config.setIdleTimeout(Long.parseLong(environment.getProperty("IdleTimeout"), 300000));
+        config.setMinimumIdle(Integer.parseInt(environment.getProperty("IdleMin"), 30));
+        config.setMaximumPoolSize(Integer.parseInt(environment.getProperty("PoolSizeMax"),150));
         config.setDataSourceClassName(PGSimpleDataSource.class.getName());
         HikariDataSource dataSource = new HikariDataSource(config);
         return dataSource;

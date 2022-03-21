@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @DynamicUpdate
-public class SeatEntity{
+public class SeatEntity extends AbstractModifyEntity<Long>{
 
     @Id
     @GeneratedValue
